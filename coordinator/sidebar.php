@@ -1,0 +1,48 @@
+<?php
+// Coordinator sidebar - match supplier layout styling
+// This file is included by coordinator pages.
+
+$currentPage = basename($_SERVER['PHP_SELF']);
+$userName = esc($_SESSION['full_name'] ?? $_SESSION['username'] ?? 'Coordinator');
+?>
+
+<aside class="sidebar">
+    <div class="brand">
+        <h1><span class="blue-text">Event</span><span class="pink-text">Intel</span></h1>
+        <div class="user-info">
+            <strong><?= $userName ?></strong>
+            <span class="supplier"><i class="fas fa-circle"></i> Coordinator</span>
+        </div>
+
+        <nav class="nav-menu">
+            <ul>
+                <li class="<?= $currentPage === 'dashboard.php' || $currentPage === 'DASHBOARD.php' ? 'active' : '' ?>">
+                    <button onclick="location.href='dashboard.php'">DASHBOARD</button>
+                </li>
+                <li class="<?= $currentPage === 'profile.php' ? 'active' : '' ?>">
+                    <button onclick="location.href='profile.php'">PROFILE</button>
+                </li>
+                <li>
+                    <button onclick="location.href='createevent.php'">CREATE EVENT</button>
+                </li>
+                <li>
+                    <button onclick="location.href='my-events.php'">MY EVENTS</button>
+                </li>
+                <li>
+                    <button onclick="location.href='my-clients.php'">MY CLIENTS</button>
+                </li>
+
+                <li>
+                    <button onclick="location.href='messages.php'">MESSAGES</button>
+                </li>
+                <li>
+                    <button onclick="location.href='../../userui/html/newsfeed.php'">NEWSFEED</button>
+                </li>
+                <li>
+                    <button onclick="if(confirm('Are you sure you want to logout?')) location.href='../auth/logout.php'" style="background:rgba(255,80,80,.1);color:#ff8b8b;">LOGOUT</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
+

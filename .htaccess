@@ -1,0 +1,14 @@
+# Prevent directory listing and restrict access to non-public resources
+Options -Indexes
+RewriteEngine On
+
+<FilesMatch "\.(sql|sh|md|yml|yaml|bat|ps1)$">
+    Require all denied
+</FilesMatch>
+
+<Files "db.php">
+    Require all denied
+</Files>
+
+RewriteRule ^tools/(migrate\.php|setup_uploads\.php)$ - [F,L]
+RewriteRule ^database/.*\.sql$ - [F,L]
