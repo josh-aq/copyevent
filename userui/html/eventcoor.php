@@ -1,3 +1,14 @@
+<?php 
+require_once __DIR__ . '/../../config/db.php'; 
+require_role('client');
+
+$pdo = db();
+
+// Fetch all coordinators from the database
+$query = "SELECT user_id, full_name FROM users WHERE role = 'coordinator' ORDER BY full_name";
+$stmt = $pdo->query($query);
+$coordinators = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -339,63 +350,34 @@
     </div>
 
     <div class="coordinator-grid">
-      <div class="coordinator-card">
-        <div class="coordinator-image">
-          <span class="badge">Wedding Planner</span>
-          <img src="../images/jay.jpg">
+      <?php if (empty($coordinators)): ?>
+        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999;">
+          <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+          <h3>No Coordinators Available</h3>
+          <p>Check back later for available event coordinators</p>
         </div>
-        <div class="coordinator-content">
-          <h3>Jay Isip</h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> 4.9</span>
-            <span><i class="fa-solid fa-calendar-check"></i> 140 Events</span>
+      <?php else: ?>
+        <?php foreach ($coordinators as $coordinator): ?>
+        <div class="coordinator-card">
+          <div class="coordinator-image">
+            <span class="badge">Professional</span>
+            <img src="../images/logo.png" alt="<?= esc($coordinator['full_name']) ?>">
           </div>
-          <p>Experienced wedding planner specializing in elegant ceremonies and full event coordination.</p>
-          <div class="footer">
-            <div class="price">₱10,500</div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="coordinator-card">
-        <div class="coordinator-image">
-          <span class="badge">Corporate Events</span>
-          <img src="../images/vince.jpg">
-        </div>
-        <div class="coordinator-content">
-          <h3>Vincent Tolentino</h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> 4.8</span>
-            <span><i class="fa-solid fa-calendar-check"></i> 115 Events</span>
-          </div>
-          <p>Professional coordinator for conferences, seminars, and corporate gatherings with excellent organization.</p>
-          <div class="footer">
-            <div class="price">₱8,700</div>
-            <a href="orgbio.php" class="select-btn">Select</a>
-            
+          <div class="coordinator-content">
+            <h3><?= esc($coordinator['full_name']) ?></h3>
+            <div class="details">
+              <span><i class="fa-solid fa-star"></i> 4.8</span>
+              <span><i class="fa-solid fa-calendar-check"></i> 100+ Events</span>
+            </div>
+            <p>Professional event coordinator with extensive experience in managing all types of events.</p>
+            <div class="footer">
+              <div class="price">₱8,500</div>
+              <a href="orgbio.php?coordinator_id=<?= $coordinator['user_id'] ?>" class="select-btn">Select</a>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="coordinator-card">
-        <div class="coordinator-image">
-          <span class="badge">Party Specialist</span>
-          <img src="../images/mamad.jpg">
-        </div>
-        <div class="coordinator-content">
-          <h3>Mama Dhel San Antonio</h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> 5.0</span>
-            <span><i class="fa-solid fa-calendar-check"></i> 160 Events</span>
-          </div>
-          <p>Creative coordinator for birthdays, parties, and themed events with strong attention to detail.</p>
-          <div class="footer">
-            <div class="price">₱9,200</div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </div>
 </body>

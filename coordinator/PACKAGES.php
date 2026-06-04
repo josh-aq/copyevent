@@ -1,0 +1,112 @@
+<?php
+session_start();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PACKAGES</title>
+    <link rel="stylesheet" href="../css/coordinator.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+</head>
+<body>
+<div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <h1><span class="blue-text">Event</span><span class="pink-text">Intel</span></h1>
+
+            <div class="user-info">
+                <strong><?= htmlspecialchars($_SESSION['full_name'] ?? 'Coordinator') ?></strong>
+                <span class="supplier">
+                    <i class="fas fa-circle"></i> Coordinator
+                </span>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <ul>
+                <li><button onclick="location.href='DASHBOARD.php'">DASHBOARD</button></li>
+                <li><button onclick="location.href='ASSIGNED_EVENTS.php'">ASSIGNED EVENTS</button></li>
+                <li class="active"><button onclick="location.href='PACKAGES.php'">PACKAGES</button></li>
+                <li><button onclick="location.href='MESSAGES.php'">MESSAGES</button></li>
+                <li><button onclick="location.href='MYSUPPLIERS.php'">MY SUPPLIERS</button></li>
+                <li><button onclick="location.href='REPORTS.php'">REPORTS</button></li>
+                <li><button onclick="location.href='SETTINGS.php'">SETTINGS</button></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="../auth/logout.php" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <div id="header"></div>
+
+        <!-- Page Title -->
+        <section class="page-header">
+            <h2>Event Packages</h2>
+            <p>Select the best package for your client.</p>
+        </section>
+
+        <!-- Packages -->
+        <section class="packages-container">
+
+            <!-- Basic -->
+            <div class="package-card">
+                <h3>Basic Package</h3>
+                <p class="price">₱15,000</p>
+                <ul>
+                    <li>✔ Venue Styling</li>
+                    <li>✔ Sound System</li>
+                    <li>✔ Basic Catering</li>
+                    <li>✔ Event Coordinator</li>
+                </ul>
+                <button>Select Package</button>
+            </div>
+
+            <!-- Standard -->
+            <div class="package-card featured">
+                <h3>Standard Package</h3>
+                <p class="price">₱35,000</p>
+                <ul>
+                    <li>✔ Premium Venue Styling</li>
+                    <li>✔ Full Catering</li>
+                    <li>✔ Lights & Sounds</li>
+                    <li>✔ Host / Emcee</li>
+                    <li>✔ Photographer</li>
+                </ul>
+                <button>Select Package</button>
+            </div>
+
+            <!-- Premium -->
+            <div class="package-card">
+                <h3>Premium Package</h3>
+                <p class="price">₱65,000</p>
+                <ul>
+                    <li>✔ Luxury Styling</li>
+                    <li>✔ Full Catering Buffet</li>
+                    <li>✔ Live Band / DJ</li>
+                    <li>✔ Photo + Video Coverage</li>
+                    <li>✔ Unlimited Drinks</li>
+                    <li>✔ Dedicated Coordinator Team</li>
+                </ul>
+                <button>Select Package</button>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+    <script src="../js/header.js"></script>
+</body>
+</html>

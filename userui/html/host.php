@@ -1,3 +1,18 @@
+<?php require_once __DIR__ . '/../../config/db.php'; require_role('client'); 
+
+$pdo = db();
+
+// Fetch host services from supplier_services table
+$query = "
+    SELECT s.*, u.full_name as supplier_name
+    FROM supplier_services s
+    JOIN users u ON s.user_id = u.user_id
+    WHERE s.category = 'Host'
+    ORDER BY s.rating DESC, s.created_at DESC
+";
+$stmt = $pdo->query($query);
+$services = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -338,62 +353,34 @@
     </div>
 
     <div class="host-grid">
+      <?php if (empty($services)): ?>
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999;">
+        <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+        <h3>No Host Services Available</h3>
+        <p>Check back later for available event hosts</p>
+      </div>
+      <?php else: ?>
+        <?php foreach ($services as $service): ?>
       <div class="host-card">
         <div class="host-image">
-          <span class="badge">Comedian Host</span>
-          <img src="images/mamad.jpg">
+          <span class="badge"><?= ($service['rating'] ?? 4.5) >= 4.5 ? 'Professional Host' : '' ?></span>
+          <img src="../images/logo.png" alt="<?= esc($service['name']) ?>">
         </div>
         <div class="host-content">
-          <h3>Mama Dhel San Antonio</h3>
+          <h3><?= esc($service['name']) ?></h3>
           <div class="details">
-            <span><i class="fa-solid fa-star"></i> 4.9</span>
-            <span><i class="fa-solid fa-microphone"></i> 110 Events</span>
+            <span><i class="fa-solid fa-star"></i> <?= number_format($service['rating'] ?? 5.0, 1) ?></span>
+            <span><i class="fa-solid fa-microphone"></i> Professional</span>
           </div>
-          <p>Experienced wedding and formal event host known for smooth transitions and engaging crowd interaction.</p>
+          <p><?= esc($service['description'] ?? 'Professional event host') ?></p>
           <div class="footer">
-            <div class="price">₱6,500</div>
+            <div class="price">₱<?= number_format($service['price'] ?? 5000) ?></div>
             <button class="select-btn">Select</button>
           </div>
         </div>
       </div>
-
-      <div class="host-card">
-        <div class="host-image">
-          <span class="badge">Formal Host</span>
-          <img src="images/vince.jpg">
-        </div>
-        <div class="host-content">
-          <h3>Vincent Tolentino</h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> 4.8</span>
-            <span><i class="fa-solid fa-microphone"></i> 95 Events</span>
-          </div>
-          <p>Professional corporate host specializing in conferences, seminars, and business celebrations.</p>
-          <div class="footer">
-            <div class="price">₱7,200</div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="host-card">
-        <div class="host-image">
-          <span class="badge"> </span>
-          <img src="">
-        </div>
-        <div class="host-content">
-          <h3></h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-microphone"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </div>
 

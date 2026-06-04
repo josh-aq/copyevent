@@ -1,3 +1,48 @@
+<?php 
+require_once __DIR__ . '/../../config/db.php'; 
+require_role('client');
+
+$pdo = db();
+$coordinator_id = intval($_GET['coordinator_id'] ?? 0);
+$coordinator = null;
+
+// Fetch coordinator details
+if ($coordinator_id) {
+    $stmt = $pdo->prepare("SELECT user_id, full_name, email FROM users WHERE user_id = ? AND role = 'coordinator'");
+    $stmt->execute([$coordinator_id]);
+    $coordinator = $stmt->fetch();
+}
+
+// Handle booking
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_coordinator'])) {
+    if ($coordinator) {
+        try {
+            // Create a new event with the coordinator
+            $eventStmt = $pdo->prepare("
+                INSERT INTO events (user_id, coordinator, coordinator_status, status, created_at) 
+                VALUES (?, ?, 'pending', 'planning', NOW())
+            ");
+            $eventStmt->execute([$_SESSION['user_id'], $coordinator['full_name']]);
+            
+            $response = ['success' => true, 'message' => 'Booking confirmed! Event created successfully.'];
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit;
+        } catch (Exception $e) {
+            $response = ['success' => false, 'message' => 'Error creating booking: ' . $e->getMessage()];
+            header('Content-Type: application/json');
+            echo json_encode($response);
+            exit;
+        }
+    }
+}
+
+// If no coordinator found, redirect
+if (!$coordinator) {
+    header('Location: homepage.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -234,16 +279,16 @@
   <!-- LEFT CARD -->
   <div class="profile-card">
     <div class="profile-img">
-      <img src="../images/vince.jpg">
+      <img src="../images/logo.png" alt="<?= esc($coordinator['full_name']) ?>">
     </div>
 
-    <h2>Vincent Tolentino</h2>
+    <h2><?= esc($coordinator['full_name']) ?></h2>
     <div class="role">Professional Event Coordinator</div>
     <div class="rating">★★★★★ (4.9)</div>
 
     <div class="action-buttons">
-      <button class="btn btn-primary">Book Now</button>
-       <a class = "msg" href="message.php" class="select-btn">Message</a>
+      <button class="btn btn-primary" onclick="bookCoordinator()">Book Now</button>
+      <a class="msg" href="message.php?user_id=<?= $coordinator['user_id'] ?>">Message</a>
     </div>
   </div>
 
@@ -285,6 +330,55 @@
 
 </div>
   </div>
+
+  <!-- Confirmation Modal -->
+  <div id="confirmModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="background: white; border-radius: 16px; padding: 30px; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+      <h3 style="margin-bottom: 16px; color: #111;">Confirm Booking</h3>
+      <p style="color: #666; margin-bottom: 24px;">Are you sure you want to book <strong><?= esc($coordinator['full_name']) ?></strong> as your event coordinator?</p>
+      <div style="display: flex; gap: 12px;">
+        <button onclick="cancelBooking()" style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ddd; background: #f5f5f5; color: #111; cursor: pointer; font-weight: 600;">Cancel</button>
+        <button onclick="confirmBooking()" style="flex: 1; padding: 12px; border-radius: 8px; border: none; background: linear-gradient(135deg, #ffe27a, #d4a017); color: white; cursor: pointer; font-weight: 600;">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function bookCoordinator() {
+    document.getElementById('confirmModal').style.display = 'flex';
+  }
+
+  function cancelBooking() {
+    document.getElementById('confirmModal').style.display = 'none';
+  }
+
+  function confirmBooking() {
+    const coordinatorId = <?= $coordinator['user_id'] ?>;
+    const coordinatorName = '<?= esc($coordinator['full_name']) ?>';
+
+    fetch('orgbio.php?coordinator_id=<?= $coordinator['user_id'] ?>', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'book_coordinator=1'
+    })
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('confirmModal').style.display = 'none';
+      if (data.success) {
+        alert('Booking confirmed! ' + coordinatorName + ' has been added to your event.\nRedirecting to your events...');
+        window.location.href = 'yourevents.php';
+      } else {
+        alert('Error: ' + data.message);
+      }
+    })
+    .catch(error => {
+      alert('Error processing booking: ' + error);
+      document.getElementById('confirmModal').style.display = 'none';
+    });
+  }
+  </script>
 
 </body>
 </html>

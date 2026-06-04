@@ -5,25 +5,92 @@ require_role('supplier');
 $pdo = db();
 
 // Handle accept/reject actions
-if (isset($_GET['action'], $_GET['id'])) {
-    $action = in_array($_GET['action'], ['accepted', 'rejected', 'pending']) ? $_GET['action'] : 'pending';
-    $pdo->prepare("UPDATE bookings SET status = ? WHERE booking_id = ?")->execute([$action, intval($_GET['id'])]);
+if (isset($_GET['action'], $_GET['id'], $_GET['service'])) {
+    $action = in_array($_GET['action'], ['accepted', 'declined', 'pending']) ? $_GET['action'] : 'pending';
+    $eventId = intval($_GET['id']);
+    $service = in_array($_GET['service'], ['venue', 'clothes', 'catering', 'host', 'photographer', 'soundsnlights']) ? $_GET['service'] : '';
+    
+    if ($service) {
+        $statusColumn = $service . '_status';
+        $pdo->prepare("UPDATE events SET $statusColumn = ? WHERE event_id = ?")->execute([$action, $eventId]);
+    }
+    
     header('Location: BOOKINGS.php');
     exit;
 }
 
-// Fetch all bookings for this supplier
-$rows = $pdo->prepare("
-    SELECT b.*, e.title, e.event_date, e.budget, e.venue_address, s.name as service_name, u.full_name as client_name 
-    FROM bookings b 
-    JOIN events e ON b.event_id = e.event_id 
-    JOIN supplier_services s ON b.service_id = s.service_id 
-    JOIN users u ON e.user_id = u.user_id
-    WHERE s.user_id = ? 
-    ORDER BY b.created_at DESC
-");
-$rows->execute([$_SESSION['user_id']]);
-$bookingRows = $rows->fetchAll();
+// Fetch all services for this supplier from supplier_services table
+$servicesQuery = "
+    SELECT service_id, category, name 
+    FROM supplier_services 
+    WHERE user_id = ?
+    ORDER BY category
+";
+$servicesStmt = $pdo->prepare($servicesQuery);
+$servicesStmt->execute([$_SESSION['user_id']]);
+$services = $servicesStmt->fetchAll();
+
+// Map category to column and status column names
+$categoryMap = [
+    'Venue' => ['column' => 'venue_name', 'status' => 'venue_status', 'key' => 'venue'],
+    'Clothing' => ['column' => 'clothes', 'status' => 'clothes_status', 'key' => 'clothes'],
+    'Catering' => ['column' => 'catering', 'status' => 'catering_status', 'key' => 'catering'],
+    'Host' => ['column' => 'host', 'status' => 'host_status', 'key' => 'host'],
+    'Photographer' => ['column' => 'photographer', 'status' => 'photographer_status', 'key' => 'photographer'],
+    'Sounds & Lights' => ['column' => 'soundsnlights', 'status' => 'soundsnlights_status', 'key' => 'soundsnlights']
+];
+
+// Build booking rows for each service
+$bookingRows = [];
+foreach ($services as $service) {
+    $category = $service['category'];
+    $serviceName = $service['name'];
+    $serviceId = $service['service_id'];
+    
+    if (isset($categoryMap[$category])) {
+        $colInfo = $categoryMap[$category];
+        $column = $colInfo['column'];
+        $statusColumn = $colInfo['status'];
+        $serviceKey = $colInfo['key'];
+        
+        // Query events for this service
+        $eventQuery = "
+            SELECT 
+                e.event_id, 
+                e.title, 
+                e.event_type, 
+                e.event_date, 
+                e.budget,
+                e.$column,
+                e.$statusColumn,
+                u.full_name as client_name
+            FROM events e
+            JOIN users u ON e.user_id = u.user_id
+            WHERE e.$column = ?
+            ORDER BY e.event_date DESC
+        ";
+        
+        $eventStmt = $pdo->prepare($eventQuery);
+        $eventStmt->execute([$serviceName]);
+        $events = $eventStmt->fetchAll();
+        
+        foreach ($events as $event) {
+            $bookingRows[] = [
+                'service_id' => $serviceId,
+                'event_id' => $event['event_id'],
+                'title' => $event['title'],
+                'event_type' => $event['event_type'],
+                'event_date' => $event['event_date'],
+                'budget' => $event['budget'],
+                'client_name' => $event['client_name'],
+                'service' => $category,
+                'service_key' => $serviceKey,
+                'status' => $event[$statusColumn],
+                'business_name' => $serviceName
+            ];
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,9 +114,10 @@ $bookingRows = $rows->fetchAll();
                     <table class="booking-table">
                         <thead>
                             <tr>
-                                <th>Event</th>
+                                <th>Supplier/Business</th>
+                                <th>Type of Event</th>
                                 <th>Service</th>
-                                <th>Client</th>
+                                <th>Client Name</th>
                                 <th>Date</th>
                                 <th>Budget</th>
                                 <th>Status</th>
@@ -59,13 +127,14 @@ $bookingRows = $rows->fetchAll();
                         <tbody>
                             <?php if (empty($bookingRows)): ?>
                             <tr>
-                                <td colspan="7" style="text-align:center;padding:40px;color:var(--muted);">No bookings yet</td>
+                                <td colspan="8" style="text-align:center;padding:40px;color:var(--muted);">No bookings yet</td>
                             </tr>
                             <?php else: ?>
                             <?php foreach ($bookingRows as $r): ?>
                             <tr>
-                                <td><?= esc($r['title'] ?? 'N/A') ?></td>
-                                <td><?= esc($r['service_name'] ?? 'N/A') ?></td>
+                                <td><?= esc($r['business_name']) ?></td>
+                                <td><?= esc($r['event_type'] ?? 'N/A') ?></td>
+                                <td><?= esc($r['service']) ?></td>
                                 <td><?= esc($r['client_name'] ?? 'N/A') ?></td>
                                 <td><span class="date"><?= esc($r['event_date'] ?? 'TBD') ?></span></td>
                                 <td>₱<?= number_format($r['budget'] ?? 0) ?></td>
@@ -76,17 +145,17 @@ $bookingRows = $rows->fetchAll();
                                         border-radius:999px;
                                         font-size:12px;
                                         font-weight:700;
-                                        <?= $r['status']==='accepted' ? 'background:rgba(100,255,150,.15);color:#64ff96;' : ($r['status']==='rejected' ? 'background:rgba(255,100,100,.15);color:#ff6464;' : 'background:rgba(243,197,71,.15);color:var(--gold);') ?>
+                                        <?= $r['status']==='accepted' ? 'background:rgba(100,255,150,.15);color:#64ff96;' : ($r['status']==='declined' ? 'background:rgba(255,100,100,.15);color:#ff6464;' : 'background:rgba(243,197,71,.15);color:var(--gold);') ?>
                                     ">
                                         <?= esc(ucfirst($r['status'])) ?>
                                     </span>
                                 </td>
                                 <td>
                                     <?php if ($r['status'] === 'pending'): ?>
-                                    <a href="?action=accepted&id=<?= $r['booking_id'] ?>" class="accept-btn" style="text-decoration:none;display:inline-block;margin-right:6px;">Accept</a>
-                                    <a href="?action=rejected&id=<?= $r['booking_id'] ?>" class="decline-btn" style="text-decoration:none;display:inline-block;">Decline</a>
+                                    <a href="?action=accepted&id=<?= $r['event_id'] ?>&service=<?= $r['service_key'] ?>" class="accept-btn" style="text-decoration:none;display:inline-block;margin-right:6px;">Accept</a>
+                                    <a href="?action=declined&id=<?= $r['event_id'] ?>&service=<?= $r['service_key'] ?>" class="decline-btn" style="text-decoration:none;display:inline-block;">Decline</a>
                                     <?php else: ?>
-                                    <a href="?action=pending&id=<?= $r['booking_id'] ?>" style="color:var(--muted);font-size:13px;text-decoration:underline;">Reset</a>
+                                    <a href="?action=pending&id=<?= $r['event_id'] ?>&service=<?= $r['service_key'] ?>" style="color:var(--muted);font-size:13px;text-decoration:underline;">Reset</a>
                                     <?php endif; ?>
                                 </td>
                             </tr>

@@ -1,3 +1,18 @@
+<?php require_once __DIR__ . '/../../config/db.php'; require_role('client'); 
+
+$pdo = db();
+
+// Fetch photographer services from supplier_services table
+$query = "
+    SELECT s.*, u.full_name as supplier_name
+    FROM supplier_services s
+    JOIN users u ON s.user_id = u.user_id
+    WHERE s.category = 'Photographer'
+    ORDER BY s.rating DESC, s.created_at DESC
+";
+$stmt = $pdo->query($query);
+$services = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -338,65 +353,37 @@
     </div>
 
     <div class="photographer-grid">
+      <?php if (empty($services)): ?>
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999;">
+        <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+        <h3>No Photographer Services Available</h3>
+        <p>Check back later for available photographers</p>
+      </div>
+      <?php else: ?>
+        <?php foreach ($services as $service): ?>
       <div class="photographer-card">
         <div class="photographer-image">
-          <span class="badge"></span>
-          <img src="https://xanthoscy.com/wp-content/uploads/2018/05/5DesirableEveryGoodPhotographer.jpg">
+          <span class="badge"><?= ($service['rating'] ?? 4.5) >= 4.5 ? 'Top Rated' : '' ?></span>
+          <img src="../images/logo.png" alt="<?= esc($service['name']) ?>">
         </div>
         <div class="photographer-content">
-          <h3>John Doe</h3>
+          <h3><?= esc($service['name']) ?></h3>
           <div class="details">
-            <span><i class="fa-solid fa-star"></i> 4.9 </span>
-            <span><i class="fa-solid fa-camera"></i> Portrait & Event Photography </span>
+            <span><i class="fa-solid fa-star"></i> <?= number_format($service['rating'] ?? 5.0, 1) ?></span>
+            <span><i class="fa-solid fa-camera"></i> Professional Photography</span>
           </div>
-          <p>Professional photographer specializing in capturing life's most precious moments with creativity and passion.</p>
+          <p><?= esc($service['description'] ?? 'Professional photography services') ?></p>
           <div class="footer">
             <div class="price">
               <small>Starting at</small>
-              <strong>₱8,000</strong>
+              <strong>₱<?= number_format($service['price'] ?? 8000) ?></strong>
             </div>
             <button class="select-btn">Select</button>
           </div>
         </div>
       </div>
-
-      <div class="photographer-card">
-        <div class="photographer-image">
-          <span class="badge"></span>
-          <img src="">
-        </div>
-        <div class="photographer-content">
-          <h3>  </h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-camera"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="photographer-card">
-        <div class="photographer-image">
-          <span class="badge"></span>
-          <img src="">
-        </div>
-        <div class="photographer-content">
-          <h3> </h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-camera"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </div>
 

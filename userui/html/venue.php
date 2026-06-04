@@ -1,3 +1,18 @@
+<?php require_once __DIR__ . '/../../config/db.php'; require_role('client'); 
+
+$pdo = db();
+
+// Fetch venue services from supplier_services table
+$query = "
+    SELECT s.*, u.full_name as supplier_name
+    FROM supplier_services s
+    JOIN users u ON s.user_id = u.user_id
+    WHERE s.category = 'Venue'
+    ORDER BY s.rating DESC, s.created_at DESC
+";
+$stmt = $pdo->query($query);
+$services = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -388,71 +403,37 @@
     </div>
 
     <div class="venue-grid">
+      <?php if (empty($services)): ?>
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999;">
+        <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+        <h3>No Venue Services Available</h3>
+        <p>Check back later for available venues</p>
+      </div>
+      <?php else: ?>
+        <?php foreach ($services as $service): ?>
       <div class="venue-card">
         <div class="venue-image">
-          <span class="tag">Popular</span>
-          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80">
+          <span class="tag"><?= ($service['rating'] ?? 4.5) >= 4.5 ? 'Popular' : '' ?></span>
+          <img src="../images/logo.png" alt="<?= esc($service['name']) ?>">
         </div>
         <div class="venue-content">
-          <h3>Casa De Alvin</h3>
+          <h3><?= esc($service['name']) ?></h3>
           <div class="venue-meta">
-            <span><i class="fa-solid fa-location-dot"></i> Apalit</span>
-            <span><i class="fa-solid fa-users"></i> 300 Guests</span>
+            <span><i class="fa-solid fa-location-dot"></i> <?= esc($service['address'] ?? 'Location') ?></span>
+            <span><i class="fa-solid fa-users"></i> 300+ Guests</span>
           </div>
-          <p>Elegant indoor venue with chandeliers, air-conditioned halls, and a spacious reception area for weddings and formal events.</p>
+          <p><?= esc($service['description'] ?? 'Professional venue') ?></p>
           <div class="venue-footer">
             <div class="price">
               <small>Starting at</small>
-              <strong>₱25,000</strong>
+              <strong>₱<?= number_format($service['price'] ?? 25000) ?></strong>
             </div>
-            <button href="venuedetails.html" type="button" class="select-btn">Select</button>
+            <button type="button" class="select-btn">Select</button>
           </div>
         </div>
       </div>
-
-      <div class="venue-card">
-        <div class="venue-image">
-          <span class="tag"></span>
-          <img src="">
-        </div>
-        <div class="venue-content">
-          <h3></h3>
-          <div class="venue-meta">
-            <span><i class="fa-solid fa-location-dot"></i> </span>
-            <span><i class="fa-solid fa-users"></i> </span>
-          </div>
-          <p></p>
-          <div class="venue-footer">
-            <div class="price">
-              <small> </small>
-              <strong></strong>
-            </div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="venue-card">
-        <div class="venue-image">
-          <span class="tag"></span>
-          <img src="">
-        </div>
-        <div class="venue-content">
-          <h3></h3>
-          <div class="venue-meta">
-            <span><i class="fa-solid fa-location-dot"></i> </span>
-            <span><i class="fa-solid fa-users"></i> </span>
-          </div>
-          <p></p>
-          <div class="venue-footer">
-            <div class="price">
-              <small> </small>
-              <strong></strong>
-            </div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </div>
 

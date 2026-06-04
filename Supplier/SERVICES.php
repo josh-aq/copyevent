@@ -69,7 +69,7 @@ $serviceRows = $rows->fetchAll();
                         <select name="category" style="padding:14px 16px;border-radius:14px;border:1px solid var(--border);background:rgba(18,18,18,.88);color:var(--text);outline:none;">
                             <option value="Venue">Venue</option>
                             <option value="Catering">Catering</option>
-                            <option value="Clothes">Clothes</option>
+                            <option value="Clothing">Clothing</option>
                             <option value="Host">Host</option>
                             <option value="Sounds & Lights">Sounds & Lights</option>
                             <option value="Photographer">Photographer</option>

@@ -1,3 +1,18 @@
+<?php require_once __DIR__ . '/../../config/db.php'; require_role('client'); 
+
+$pdo = db();
+
+// Fetch sounds & lights services from supplier_services table
+$query = "
+    SELECT s.*, u.full_name as supplier_name
+    FROM supplier_services s
+    JOIN users u ON s.user_id = u.user_id
+    WHERE s.category = 'Sounds & Lights'
+    ORDER BY s.rating DESC, s.created_at DESC
+";
+$stmt = $pdo->query($query);
+$services = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -340,62 +355,34 @@
     </div>
 
     <div class="services-grid">
+      <?php if (empty($services)): ?>
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999;">
+        <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+        <h3>No Sounds & Lights Services Available</h3>
+        <p>Check back later for available sound and lighting services</p>
+      </div>
+      <?php else: ?>
+        <?php foreach ($services as $service): ?>
       <div class="service-card">
         <div class="service-image">
-          <span class="badge">Concert Setup</span>
-          <img src="images/rm.jpg">
+          <span class="badge"><?= ($service['rating'] ?? 4.5) >= 4.5 ? 'Professional' : '' ?></span>
+          <img src="../images/logo.png" alt="<?= esc($service['name']) ?>">
         </div>
         <div class="service-content">
-          <h3>RM Lights & Sounds</h3>
+          <h3><?= esc($service['name']) ?></h3>
           <div class="details">
-            <span><i class="fa-solid fa-star"></i> 4.9</span>
-            <span><i class="fa-solid fa-volume-high"></i> 150 Events</span>
+            <span><i class="fa-solid fa-star"></i> <?= number_format($service['rating'] ?? 5.0, 1) ?></span>
+            <span><i class="fa-solid fa-volume-high"></i> Professional</span>
           </div>
-          <p>Professional concert-grade sound system with LED wall lighting and stage effects for large events.</p>
+          <p><?= esc($service['description'] ?? 'Professional sound and lighting services') ?></p>
           <div class="footer">
-            <div class="price">₱18,500</div>
+            <div class="price">₱<?= number_format($service['price'] ?? 18500) ?></div>
             <button class="select-btn">Select</button>
           </div>
         </div>
       </div>
-
-      <div class="service-card">
-        <div class="service-image">
-          <span class="badge"></span>
-          <img src="">
-        </div>
-        <div class="service-content">
-          <h3></h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-lightbulb"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="service-card">
-        <div class="service-image">
-          <span class="badge"></span>
-          <img src="">
-        </div>
-        <div class="service-content">
-          <h3></h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-music"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </div>
 

@@ -1,3 +1,18 @@
+<?php require_once __DIR__ . '/../../config/db.php'; require_role('client'); 
+
+$pdo = db();
+
+// Fetch catering services from supplier_services table
+$query = "
+    SELECT s.*, u.full_name as supplier_name
+    FROM supplier_services s
+    JOIN users u ON s.user_id = u.user_id
+    WHERE s.category = 'Catering'
+    ORDER BY s.rating DESC, s.created_at DESC
+";
+$stmt = $pdo->query($query);
+$services = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -351,65 +366,37 @@
     </div>
 
     <div class="catering-grid">
+      <?php if (empty($services)): ?>
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999;">
+        <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+        <h3>No Catering Services Available</h3>
+        <p>Check back later for available catering services</p>
+      </div>
+      <?php else: ?>
+        <?php foreach ($services as $service): ?>
       <div class="catering-card">
         <div class="catering-image">
-          <span class="badge"></span>
-          <img src="https://cdn.prod.website-files.com/612529786e2289cb49c971bc/6765775e5209a574871d7205_catering_home_inset.jpg">
+          <span class="badge"><?= ($service['rating'] ?? 4.5) >= 4.5 ? 'Highly Rated' : '' ?></span>
+          <img src="../images/logo.png" alt="<?= esc($service['name']) ?>">
         </div>
         <div class="catering-content">
-          <h3>Antonio's Catering</h3>
+          <h3><?= esc($service['name']) ?></h3>
           <div class="details">
-            <span><i class="fa-solid fa-star"></i> 4.8 </span>
-            <span><i class="fa-solid fa-users"></i> 100+ guests </span>
+            <span><i class="fa-solid fa-star"></i> <?= number_format($service['rating'] ?? 5.0, 1) ?></span>
+            <span><i class="fa-solid fa-users"></i> 50+ guests</span>
           </div>
-          <p>Experience the finest Italian cuisine at Antonio's Catering. Our talented chefs will create a memorable dining experience for your special occasion.</p>
+          <p><?= esc($service['description'] ?? 'Professional catering service') ?></p>
           <div class="footer">
             <small>Starting at</small>
             <div class="price">
-              <strong>₱5,000</strong>
+              <strong>₱<?= number_format($service['price'] ?? 5000) ?></strong>
             </div>
             <button class="select-btn">Select</button>
           </div>
         </div>
       </div>
-
-      <div class="catering-card">
-        <div class="catering-image">
-          <span class="badge"></span>
-          <img src="">
-        </div>
-        <div class="catering-content">
-          <h3></h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-users"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="catering-card">
-        <div class="catering-image">
-          <span class="badge"></span>
-          <img src="">
-        </div>
-        <div class="catering-content">
-          <h3></h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-users"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </div>
 

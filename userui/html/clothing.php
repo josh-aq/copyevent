@@ -1,9 +1,24 @@
+<?php require_once __DIR__ . '/../../config/db.php'; require_role('client'); 
+
+$pdo = db();
+
+// Fetch clothing services from supplier_services table
+$query = "
+    SELECT s.*, u.full_name as supplier_name
+    FROM supplier_services s
+    JOIN users u ON s.user_id = u.user_id
+    WHERE s.category = 'Clothing'
+    ORDER BY s.rating DESC, s.created_at DESC
+";
+$stmt = $pdo->query($query);
+$services = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EventIntel - Select Catering</title>
+  <title>EventIntel - Select Clothing</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <style>
@@ -351,64 +366,36 @@
     </div>
 
     <div class="clothing-grid">
+      <?php if (empty($services)): ?>
+      <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #999;">
+        <i class="fas fa-box-open" style="font-size: 48px; margin-bottom: 20px; display: block;"></i>
+        <h3>No Clothing Services Available</h3>
+        <p>Check back later for available clothing services</p>
+      </div>
+      <?php else: ?>
+        <?php foreach ($services as $service): ?>
       <div class="clothing-card">
         <div class="clothing-image">
-          <span class="badge">High Rating</span>
-          <img src="">
+          <span class="badge"><?= ($service['rating'] ?? 4.5) >= 4.5 ? 'Highly Rated' : '' ?></span>
+          <img src="../images/logo.png" alt="<?= esc($service['name']) ?>">
         </div>
         <div class="clothing-content">
-          <h3>Fabrica MNL Inc.</h3>
+          <h3><?= esc($service['name']) ?></h3>
           <div class="details">
-            <span><i class="fa-solid fa-star"></i>5.0</span>
-            <span><i class="fa-solid fa-users"></i>100</span>
+            <span><i class="fa-solid fa-star"></i> <?= number_format($service['rating'] ?? 5.0, 1) ?></span>
+            <span><i class="fa-solid fa-users"></i> <?= $service['user_id'] ?? 0 ?></span>
           </div>
-           <p>Premium clothing rental service for weddings and formal events.</p>
+          <p><?= esc($service['description'] ?? 'Professional clothing service') ?></p>
           <div class="footer">
             <div class="price"></div>
             <small>Starting at</small>
-            <strong>₱5,000</strong>
+            <strong>₱<?= number_format($service['price'] ?? 5000) ?></strong>
             <button class="select-btn">Select</button>
           </div>
         </div>
       </div>
-
-      <div class="clothing-card">
-        <div class="clothing-image">
-          <span class="badge"></span>
-          <img src="">
-        </div>
-        <div class="clothing-content">
-          <h3></h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-users"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="clothing-card">
-        <div class="clothing-image">
-          <span class="badge"></span>
-          <img src="">
-        </div>
-        <div class="clothing-content">
-          <h3></h3>
-          <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-users"></i> </span>
-          </div>
-          <p></p>
-          <div class="footer">
-            <div class="price"></div>
-            <button class="select-btn">Select</button>
-          </div>
-        </div>
-      </div>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </div>
   </div>
 

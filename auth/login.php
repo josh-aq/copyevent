@@ -61,7 +61,7 @@ try {
             break;
 
         case 'coordinator':
-            redirect_to('coordinator/profile.php');
+            redirect_to('coordinator/dashboard.php');
             break;
 
         case 'client':
