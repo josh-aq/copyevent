@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../config/db.php';
 require_login();
-// Redirect removed: Home should go to the same page users see when tapping Home (newsfeed)
+// Navbar includes Home, Create Event, Your Events, Recommendations, and Newsfeed
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,13 +19,13 @@ require_login();
     }
 
     body {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background: #ffffff;
-      color: #111;
-      position: relative;
-    }
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: #ffffff;
+  color: #111;
+  position: relative;
+}
 
     body::before,
     body::after {
@@ -52,26 +52,27 @@ require_login();
       right: -140px;
     }
 
-    .container {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 6px 48px 0;
-    }
+   .container {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 48px 40px;
+}
 
-    .navbar {
-      width: 100%;
-      padding: 6px 0 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      z-index: 3;
-      backdrop-filter: blur(10px);
-    }
+  .navbar {
+  width: 100%;
+  padding: 12px 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 3;
+}
 
     .logo {
       font-size: 26px;
@@ -80,11 +81,12 @@ require_login();
       letter-spacing: 1px;
     }
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
     .nav-links button {
       padding: 8px 18px;
@@ -167,13 +169,18 @@ require_login();
       -webkit-text-fill-color: transparent;
     }
 
-    .hero p {
-      margin-top: 18px;
-      font-size: 16px;
-      color: #444444;
-      max-width: 680px;
-      line-height: 1.5;
-    }
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px 30px;
+  margin-top: 0;
+  position: relative;
+  z-index: 2;
+}
 
     .button-group {
       margin-top: 40px;
@@ -279,16 +286,16 @@ require_login();
     }
 
     .event-gallery {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      overflow: hidden;
-      z-index: 0;
-      opacity: 0.38;
-      filter: brightness(0.95) saturate(1);
-    }
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  z-index: -1;
+  opacity: 0.12;
+  pointer-events: none;
+}
 
     .event-gallery::before {
       content: "";
@@ -326,29 +333,68 @@ require_login();
       transform: scale(1.05);
     }
 
-    .welcome-msg {
-      position: side;
-      top: 20px;
-      right: 200px;
-      color: #c99700;
-      font-size: 14px;
-      z-index: 10;
-    }
+.welcome-msg {
+  color: #c99700;
+  font-size: 14px;
+  font-weight: 600;
+  margin-right: 12px;
+}
+@media (max-width: 768px) {
+
+  .container {
+    padding: 15px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-links {
+    justify-content: center;
+  }
+
+  .hero h1 {
+    font-size: 36px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .action-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .supplier-grid {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 <body>
-  <div class="container">
 
+<section class="event-gallery">
+  ...
+</section>
+
+<div class="container">
 <nav class="navbar">
   <div class="logo">EventIntel</div>
 
   <div class="nav-links">
-    <span class="welcome-msg">Welcome, <?= esc($_SESSION['full_name'] ?? 'User') ?>!</span>
-    <button class="active" onclick="window.location.href='newsfeed.php'">Home</button>
-    <button onclick="window.location.href='createevent.php'">Create Event</button>
-    <button onclick="window.location.href='yourevents.php'">Your Events</button>
-    <button onclick="window.location.href='recommendation.php'">Recommendations</button>
-    <button onclick="window.location.href='newsfeed.php'">Newsfeed</button>
+  <span class="welcome-msg">
+    Welcome, <?= esc($_SESSION['full_name'] ?? 'User') ?>!
+  </span>
+
+  <button class="active" onclick="window.location.href='homepage.php'">Home</button>
+  <button onclick="window.location.href='createevent.php'">Create Event</button>
+  <button onclick="window.location.href='yourevents.php'">Your Events</button>
+  <button onclick="window.location.href='recommendation.php'">Recommendations</button>
+  <button onclick="window.location.href='newsfeed.php'">Newsfeed</button>
+</div>
 </nav>
 
 <section class="hero">

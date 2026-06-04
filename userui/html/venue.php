@@ -80,10 +80,12 @@
 
   .navbar {
     width: 100%;
-    padding: 6px 0 24px;
+    padding: 12px 0 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
   }
 
   .logo {
@@ -96,15 +98,16 @@
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   .nav-links button {
     padding: 8px 18px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 215, 0, 0.25);
-    background: #fff;
-    color: #444;
+    border: 1px solid rgba(212,160,23,0.35);
+    background: rgba(255,255,255,0.55);
+    color: #222;
     font-size: 14px;
     cursor: pointer;
     transition: 0.3s ease;
@@ -112,8 +115,8 @@
 
   .nav-links button:hover,
   .nav-links .active {
-    background: rgba(255, 215, 0, 0.12);
-    color: #f3c547;
+    background: linear-gradient(to right, #ffe17a, #d4a017);
+    color: black;
     box-shadow: 0 0 14px rgba(255, 215, 0, 0.12);
   }
 
@@ -356,9 +359,8 @@
         <button onclick="window.location.href='homepage.php'">Home</button>
         <button class="active" onclick="window.location.href='createevent.php'">Create Event</button>
         <button onclick="window.location.href='yourevents.php'">Your Events</button>
-        <div class="profile-btn" onclick="window.location.href='profile.php'">
-          <i class="fa-regular fa-user"></i>
-        </div>
+        <button onclick="window.location.href='recommendation.php'">Recommendations</button>
+        <button onclick="window.location.href='newsfeed.php'">Newsfeed</button>
       </div>
     </div>
 
@@ -403,7 +405,7 @@
               <small>Starting at</small>
               <strong>₱25,000</strong>
             </div>
-            <button class="select-btn">Select</button>
+            <button href="venuedetails.html" type="button" class="select-btn">Select</button>
           </div>
         </div>
       </div>
@@ -463,7 +465,7 @@ function selectVenue(venueName, venueId) {
   if (from === 'createevent') {
     // If opened as popup, send message to parent
     if (window.opener && !window.opener.closed) {
-      window.opener.postMessage({ type: 'serviceSelected', service: 'venue' }, '*');
+     window.opener.postMessage({type: 'serviceSelected', service: 'venue', venue: venueName}, '*');
       // Store selected venue info in localStorage for the parent to read
       localStorage.setItem('selectedVenue', JSON.stringify({name: venueName, id: venueId}));
       alert('Venue "' + venueName + '" selected!');
@@ -483,7 +485,7 @@ document.querySelectorAll('.select-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
     const card = this.closest('.venue-card');
     const name = card.querySelector('h3')?.textContent || 'Venue';
-    selectVenue(name, null);
+    selectVenue(name, 'venue1');
   });
 });
 </script>

@@ -10,10 +10,16 @@ $date = $_POST['event_date'] ?? '';
 $time = $_POST['event_time'] ?? '';
 $guest_count = intval($_POST['guest_count'] ?? 0);
 $services = $_POST['services'] ?? [];
+$venue_name = trim($_POST['venue'] ?? '');
+$clothes = trim($_POST['clothes'] ?? '');
+$catering = trim($_POST['catering'] ?? '');
+$host = trim($_POST['host'] ?? '');
+$photographer = trim($_POST['photographer'] ?? '');
+$sounds_lights = trim($_POST['sounds_lights'] ?? '');
 $title = $event_type . ' Event';
 
-$stmt = db()->prepare("INSERT INTO events (user_id,title,event_type,event_date,event_time,guest_count,status) VALUES (?,?,?,?,?,?,?)");
-$stmt->execute([$_SESSION['user_id'],$title,$event_type,$date,$time,$guest_count,'planning']);
+$stmt = db()->prepare("INSERT INTO events (user_id,title,event_type,event_date,event_time,guest_count,venue_name,clothes,catering,host,photographer,soundsnlights,status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+$stmt->execute([$_SESSION['user_id'],$title,$event_type,$date,$time,$guest_count,$venue_name,$clothes,$catering,$host,$photographer,$sounds_lights,'planning']);
 $event_id = db()->lastInsertId();
 
 $stmt = db()->prepare("INSERT INTO event_services (event_id,service_name) VALUES (?,?)");

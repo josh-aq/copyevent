@@ -11,14 +11,14 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{background:#ffffff;color:#222;height:100vh}
 
-.container{max-width:1600px;margin:auto;padding:6px 48px;height:100%;display:flex;flex-direction:column}
+.container{max-width:1600px;margin:auto;padding:6px 48px 40px;height:100%;display:flex;flex-direction:column}
 
 /* NAVBAR */
-.navbar{width:100%;padding:6px 0 24px;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:26px;font-weight:800;color:#f3c547}
-.nav-links{display:flex;align-items:center;gap:18px}
-.nav-links button{padding:8px 18px;border-radius:12px;border:1px solid rgba(255,215,0,.25);background:#fff;color:#444;cursor:pointer}
-.nav-links button:hover,.nav-links .active{background:rgba(255,215,0,.12);color:#f3c547}
+.navbar{width:100%;padding:12px 0 24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.logo{font-size:26px;font-weight:800;color:#f3c547;letter-spacing:1px}
+.nav-links{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.nav-links button{padding:8px 18px;border-radius:12px;border:1px solid rgba(255,215,0,.35);background:rgba(255,255,255,.55);color:#222;font-size:14px;cursor:pointer;transition:.3s ease}
+.nav-links button:hover,.nav-links .active{background:linear-gradient(to right,#ffe17a,#d4a017);color:black;box-shadow:0 0 14px rgba(255,215,0,.12)}
 .profile-btn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,215,0,.30);background:#fff;display:flex;align-items:center;justify-content:center;color:#f3c547}
 
 /* CHAT LAYOUT */
@@ -62,10 +62,11 @@ body{background:#ffffff;color:#222;height:100vh}
 <div class="navbar">
 <div class="logo">EventIntel</div>
 <div class="nav-links">
-<button>Home</button>
-<button>Create Event</button>
-<button>Your Events</button>
-<div class="profile-btn"><i class="fa-regular fa-user"></i></div>
+<button onclick="window.location.href='homepage.php'">Home</button>
+<button onclick="window.location.href='createevent.php'">Create Event</button>
+<button onclick="window.location.href='yourevents.php'">Your Events</button>
+<button onclick="window.location.href='recommendation.php'">Recommendations</button>
+<button onclick="window.location.href='newsfeed.php'">Newsfeed</button>
 </div>
 </div>
 

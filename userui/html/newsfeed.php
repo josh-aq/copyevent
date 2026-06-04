@@ -78,20 +78,16 @@ $current_user = $current_user->fetch();
         /* NAVBAR */
         .navbar {
             width: 100%;
-            padding: 18px 24px;
+            padding: 12px 0 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: white;
-            border-bottom: 1px solid rgba(243,197,71,0.12);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
         .navbar-brand {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
             color: #f3c547;
             letter-spacing: 1px;
@@ -101,22 +97,25 @@ $current_user = $current_user->fetch();
             display: flex;
             gap: 12px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .navbar-nav button {
-            padding: 8px 14px;
-            border: 1px solid rgba(243,197,71,0.3);
-            background: transparent;
+            padding: 8px 18px;
+            border: 1px solid rgba(212,160,23,0.35);
+            background: rgba(255,255,255,0.55);
             color: #222;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: 0.3s;
-            font-size: 13px;
+            transition: 0.3s ease;
+            font-size: 14px;
         }
 
-        .navbar-nav button:hover {
-            background: rgba(243,197,71,0.1);
-            border-color: #f3c547;
+        .navbar-nav button:hover,
+        .navbar-nav button.active {
+            background: linear-gradient(to right, #ffe17a, #d4a017);
+            color: black;
+            box-shadow: 0 0 14px rgba(255, 215, 0, 0.12);
         }
 
         .profile-avatar {
@@ -369,11 +368,11 @@ $current_user = $current_user->fetch();
     <div class="navbar">
         <div class="navbar-brand">EventIntel</div>
         <div class="navbar-nav">
-            <button class="active" onclick="window.location.href='newsfeed.php'">Home</button>
+            <button onclick="window.location.href='homepage.php'">Home</button>
+            <button onclick="window.location.href='createevent.php'">Create Event</button>
+            <button onclick="window.location.href='yourevents.php'">Your Events</button>
             <button onclick="window.location.href='recommendation.php'">Recommendations</button>
-            <div class="profile-avatar" onclick="window.location.href='profile.php'">
-                <i class="fas fa-user"></i>
-            </div>
+            <button class="active" onclick="window.location.href='newsfeed.php'">Newsfeed</button>
         </div>
     </div>
 

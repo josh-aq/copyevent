@@ -87,15 +87,17 @@
       width: min(1600px, 100%);
       margin: 0 auto;
       min-height: 100vh;
-      padding: 26px 42px 40px;
+      padding: 6px 48px 40px;
     }
 
     .navbar {
       width: 100%;
-      padding: 6px 0 24px;
+      padding: 12px 0 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
       position: relative;
       z-index: 3;
     }
@@ -106,34 +108,33 @@
       gap: 8px;
       font-size: 26px;
       font-weight: 800;
-      color: var(--gold);
+      color: #f3c547;
       letter-spacing: 1px;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .nav-links button {
       padding: 8px 18px;
       border-radius: 12px;
-      border: 1px solid rgba(212,160,23,0.18);
-      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(212,160,23,0.35);
+      background: rgba(255,255,255,0.55);
       color: #222;
       font-size: 14px;
       cursor: pointer;
       transition: 0.3s ease;
-      font-weight: 500;
-      backdrop-filter: blur(10px);
     }
 
     .nav-links button:hover,
     .nav-links .active {
       background: linear-gradient(to right, #ffe17a, #d4a017);
-      color: #111;
-      box-shadow: 0 0 14px rgba(255, 215, 0, 0.18);
+      color: black;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.12);
     }
 
     .profile-btn {
@@ -310,6 +311,11 @@
     .other-input {
       margin-top: 18px;
     }
+    .other-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(230,230,230,0.7);
+}
 
     .other-input:focus,
     .field input:focus {
@@ -525,9 +531,8 @@
         <button type="button" onclick="window.location.href='homepage.php'">Home</button>
         <button type="button" class="active" onclick="window.location.href='createevent.php'">Create Event</button>
         <button type="button" onclick="window.location.href='yourevents.php'">Your Events</button>
-        <div class="profile-btn" onclick="window.location.href='profile.php'" title="Profile">
-          <i class="fa-regular fa-user"></i>
-        </div>
+        <button type="button" onclick="window.location.href='recommendation.php'">Recommendations</button>
+        <button type="button" onclick="window.location.href='newsfeed.php'">Newsfeed</button>
       </div>
     </div>
 
@@ -539,6 +544,12 @@
     </div>
 
     <form action="save_event.php" method="POST">
+    <input type="hidden" name="venue" id="selectedVenue">
+    <input type="hidden" name="clothes" id="selectedClothes">
+    <input type="hidden" name="catering" id="selectedCatering">
+    <input type="hidden" name="host" id="selectedHost">
+    <input type="hidden" name="photographer" id="selectedPhotographer">
+    <input type="hidden" name="sounds_lights" id="selectedSoundsLights">
     <div class="content">
       <div class="left-column">
         <div class="card">
@@ -554,7 +565,7 @@
             <label class="event-option"><input type="radio" name="event_type" value="Others" required><span>Others</span></label>
           </div>
 
-          <input class="other-input" type="text" name="other_event_type" placeholder="Other event type...">
+          <input class="other-input" type="text" name="other_event_type" id="otherEventType" placeholder="Other event type..." disabled>
         </div>
 
         <div class="card schedule-card hidden-step">
@@ -640,6 +651,22 @@
   </div>
 
 <script>
+
+  function toggleOtherInput() {
+  const selected = document.querySelector('input[name="event_type"]:checked');
+  const otherInput = document.getElementById('otherEventType');
+
+  if (selected && selected.value === 'Others') {
+    otherInput.disabled = false;
+    otherInput.required = true;
+    otherInput.focus();
+  } else {
+    otherInput.disabled = true;
+    otherInput.required = false;
+    otherInput.value = '';
+  }
+}
+
 function openService(service) {
   const url = service + '.php?from=createevent';
   const popup = window.open(url, 'SelectService', 'width=1000,height=700,scrollbars=yes,resizable=yes');
@@ -652,11 +679,42 @@ function openService(service) {
 window.addEventListener('message', function(e) {
   if (e.data && e.data.type === 'serviceSelected') {
     const service = e.data.service;
+
     const checkbox = document.getElementById('check-' + service);
     if (checkbox) {
       checkbox.checked = true;
       const row = checkbox.closest('.service-row');
       if (row) row.style.borderColor = 'rgba(243,197,71,0.45)';
+    }
+
+    // Venue
+    if (service === 'venue' && e.data.venue) {
+      document.getElementById('selectedVenue').value = e.data.venue;
+    }
+
+    // Clothes
+    if (service === 'clothes' && e.data.clothes) {
+      document.getElementById('selectedClothes').value = e.data.clothes;
+    }
+
+    // Catering
+    if (service === 'catering' && e.data.catering) {
+      document.getElementById('selectedCatering').value = e.data.catering;
+    }
+
+    // Host
+    if (service === 'host' && e.data.host) {
+      document.getElementById('selectedHost').value = e.data.host;
+    }
+
+    // Photographer
+    if (service === 'photographer' && e.data.photographer) {
+      document.getElementById('selectedPhotographer').value = e.data.photographer;
+    }
+
+    // Sounds & Lights
+    if (service === 'sounds_lights' && e.data.sounds_lights) {
+      document.getElementById('selectedSoundsLights').value = e.data.sounds_lights;
     }
   }
 });
@@ -684,6 +742,7 @@ function showScheduleIfReady() {
 
 document.querySelectorAll('input[name="event_type"]').forEach(function(input) {
   input.addEventListener('change', function() {
+    toggleOtherInput();
     updateStep(2);
     showScheduleIfReady();
   });

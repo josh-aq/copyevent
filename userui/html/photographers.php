@@ -85,10 +85,12 @@
 
     .navbar {
       width: 100%;
-      padding: 6px 0 24px;
+      padding: 12px 0 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
     .logo {
@@ -101,15 +103,16 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .nav-links button {
       padding: 8px 18px;
       border-radius: 12px;
-      border: 1px solid rgba(243,197,71,0.25);
-      background: rgba(255,255,255,.9);
-      color: #444;
+      border: 1px solid rgba(243,197,71,0.35);
+      background: rgba(255,255,255,.55);
+      color: #222;
       font-size: 14px;
       cursor: pointer;
       transition: 0.3s ease;
@@ -117,9 +120,9 @@
 
     .nav-links button:hover,
     .nav-links .active {
-      background: rgba(243,197,71,0.12);
-      color: #f3c547;
-      box-shadow: 0 0 14px rgba(243,197,71,0.12);
+      background: linear-gradient(to right, #ffe17a, #d4a017);
+      color: black;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.12);
     }
 
     .profile-btn {
@@ -317,9 +320,8 @@
         <button onclick="window.location.href='homepage.php'">Home</button>
         <button class="active" onclick="window.location.href='createevent.php'">Create Event</button>
         <button onclick="window.location.href='yourevents.php'">Your Events</button>
-        <div class="profile-btn" onclick="window.location.href='profile.php'">
-          <i class="fa-regular fa-user"></i>
-        </div>
+        <button onclick="window.location.href='recommendation.php'">Recommendations</button>
+        <button onclick="window.location.href='newsfeed.php'">Newsfeed</button>
       </div>
     </div>
 
@@ -339,17 +341,20 @@
       <div class="photographer-card">
         <div class="photographer-image">
           <span class="badge"></span>
-          <img src="">
+          <img src="https://xanthoscy.com/wp-content/uploads/2018/05/5DesirableEveryGoodPhotographer.jpg">
         </div>
         <div class="photographer-content">
-          <h3></h3>
+          <h3>John Doe</h3>
           <div class="details">
-            <span><i class="fa-solid fa-star"></i> </span>
-            <span><i class="fa-solid fa-camera"></i> </span>
+            <span><i class="fa-solid fa-star"></i> 4.9 </span>
+            <span><i class="fa-solid fa-camera"></i> Portrait & Event Photography </span>
           </div>
-          <p></p>
+          <p>Professional photographer specializing in capturing life's most precious moments with creativity and passion.</p>
           <div class="footer">
-            <div class="price"></div>
+            <div class="price">
+              <small>Starting at</small>
+              <strong>₱8,000</strong>
+            </div>
             <button class="select-btn">Select</button>
           </div>
         </div>
@@ -401,7 +406,9 @@ function selectService(serviceName, serviceType) {
   const from = params.get('from');
   if (from === 'createevent') {
     if (window.opener && !window.opener.closed) {
-      window.opener.postMessage({ type: 'serviceSelected', service: serviceType }, '*');
+      const message = { type: 'serviceSelected', service: serviceType };
+      message[serviceType] = serviceName;
+      window.opener.postMessage(message, '*');
       alert(serviceName + ' selected!');
       window.close();
     } else {

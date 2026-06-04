@@ -28,37 +28,40 @@ if($event_id){$st=db()->prepare("SELECT * FROM events WHERE event_id=?");$st->ex
     .container {
       max-width: 1600px;
       margin: auto;
-      padding: 6px 48px 30px;
+      padding: 6px 48px 40px;
     }
 
     /* NAVBAR */
     .navbar {
       width: 100%;
-      padding: 6px 0 24px;
+      padding: 12px 0 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
     .logo {
       font-size: 26px;
       font-weight: 800;
-      color: #d4a017;
+      color: #f3c547;
       letter-spacing: 1px;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .nav-links button {
       padding: 8px 18px;
       border-radius: 12px;
-      border: 1px solid rgba(212,160,23,0.25);
-      background: #fff;
-      color: #444;
+      border: 1px solid rgba(212,160,23,0.35);
+      background: rgba(255,255,255,0.55);
+      color: #222;
       font-size: 14px;
       cursor: pointer;
       transition: 0.3s ease;
@@ -66,9 +69,9 @@ if($event_id){$st=db()->prepare("SELECT * FROM events WHERE event_id=?");$st->ex
 
     .nav-links button:hover,
     .nav-links .active {
-      background: rgba(255, 215, 0, 0.10);
-      color: #d4a017;
-      box-shadow: 0 0 14px rgba(255, 215, 0, 0.10);
+      background: linear-gradient(to right, #ffe17a, #d4a017);
+      color: black;
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.12);
     }
 
     .profile-btn {
@@ -194,13 +197,11 @@ if($event_id){$st=db()->prepare("SELECT * FROM events WHERE event_id=?");$st->ex
   <div class="logo">EventIntel</div>
 
   <div class="nav-links">
-    <button>Home</button>
-    <button class="active">Create Event</button>
-    <button>Your Events</button>
-
-    <div class="profile-btn">
-      <i class="fa-regular fa-user"></i>
-    </div>
+    <button onclick="window.location.href='homepage.php'">Home</button>
+    <button class="active" onclick="window.location.href='createevent.php'">Create Event</button>
+    <button onclick="window.location.href='yourevents.php'">Your Events</button>
+    <button onclick="window.location.href='recommendation.php'">Recommendations</button>
+    <button onclick="window.location.href='newsfeed.php'">Newsfeed</button>
   </div>
 </div>
 
