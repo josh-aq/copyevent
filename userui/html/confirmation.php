@@ -1,3 +1,15 @@
+<?php
+require_once __DIR__ . '/../../config/db.php';
+require_role('client');
+
+$event_id = $_GET['event_id'] ?? null;
+$event = null;
+if ($event_id) {
+    $stmt = db()->prepare("SELECT payment_method FROM events WHERE event_id = ? AND user_id = ?");
+    $stmt->execute([$event_id, $_SESSION['user_id']]);
+    $event = $stmt->fetch();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -192,6 +204,29 @@
       Your event has been successfully booked! All details have been saved and 
       our team is preparing everything for your special event.
     </p>
+
+    <div style="background: rgba(243, 197, 71, 0.08); border-left: 4px solid #f3c547; padding: 16px; border-radius: 8px; margin: 20px 0; text-align: left;">
+      <div style="color: #666; font-size: 14px; margin-bottom: 8px;">
+        <strong>Payment Method:</strong>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; color: #f3c547;">
+        <?php 
+        if ($event) {
+            $payment_method = $event['payment_method'] ?? 'cash';
+            if ($payment_method === 'online') {
+                echo '<i class="fas fa-credit-card"></i> Online Payment (GCash/Bank Transfer)';
+            } else {
+                echo '<i class="fas fa-money-bill-wave"></i> Cash Payment';
+            }
+        } else {
+            echo '<i class="fas fa-question-circle"></i> Payment Method Not Found';
+        }
+        ?>
+      </div>
+      <div style="color: #999; font-size: 12px; margin-top: 8px;">
+        Suppliers and coordinators can see this payment method and may contact you regarding their payment preferences.
+      </div>
+    </div>
 
     <div class="actions">
       <button class="btn btn-primary" onclick="window.location.href='yourevents.php'">View Event</button>

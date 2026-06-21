@@ -85,7 +85,7 @@ $newsFeed = [
         <main class="main-content">
             <div id="header"></div>
             <div class="main-header-actions">
-                <button type="button" class="top-nav-btn" onclick="location.href='FEED.php'">Newsfeed</button>
+                <button type="button" class="top-nav-btn" onclick="location.href='../globalaccess/newsfeed.php'">Newsfeed</button>
                 <button type="button" class="top-nav-btn" onclick="location.href='SERVICES.php'">Manage Services</button>
             </div>
 

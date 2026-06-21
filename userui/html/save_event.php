@@ -16,10 +16,11 @@ $catering = trim($_POST['catering'] ?? '');
 $host = trim($_POST['host'] ?? '');
 $photographer = trim($_POST['photographer'] ?? '');
 $sounds_lights = trim($_POST['sounds_lights'] ?? '');
+$payment_method = trim($_POST['payment_method'] ?? 'cash');
 $title = $event_type . ' Event';
 
-$stmt = db()->prepare("INSERT INTO events (user_id,title,event_type,event_date,event_time,guest_count,venue_name,clothes,catering,host,photographer,soundsnlights,status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-$stmt->execute([$_SESSION['user_id'],$title,$event_type,$date,$time,$guest_count,$venue_name,$clothes,$catering,$host,$photographer,$sounds_lights,'planning']);
+$stmt = db()->prepare("INSERT INTO events (user_id,title,event_type,event_date,event_time,guest_count,venue_name,clothes,catering,host,photographer,soundsnlights,status,payment_method,payment_status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+$stmt->execute([$_SESSION['user_id'],$title,$event_type,$date,$time,$guest_count,$venue_name,$clothes,$catering,$host,$photographer,$sounds_lights,'planning',$payment_method,'pending']);
 $event_id = db()->lastInsertId();
 
 $stmt = db()->prepare("INSERT INTO event_services (event_id,service_name) VALUES (?,?)");
@@ -29,6 +30,6 @@ foreach ($services as $s) $stmt->execute([$event_id, preg_replace('/[^a-zA-Z0-9_
 $inv = db()->prepare("INSERT INTO invitations (event_id,title,message,theme_color,button_text) VALUES (?,?,?,?,?)");
 $inv->execute([$event_id, "You're Invited to $title", "Please confirm your attendance.", "#f3c547", "Confirm RSVP"]);
 
-header("Location: confirmation.php");
+header("Location: confirmation.php?event_id=$event_id");
 exit;
 ?>

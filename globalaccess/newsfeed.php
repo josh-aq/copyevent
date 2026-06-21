@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Use absolute path to config
-$config_path = realpath(__DIR__ . '/../../config/db.php');
+$config_path = realpath(__DIR__ . '/../config/db.php');
 if (!$config_path) {
     die('Configuration file not found');
 }
@@ -13,7 +13,7 @@ require_once $config_path;
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: ../../auth/login.php');
+    header('Location: ../auth/login.php');
     exit;
 }
 
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     if (!empty($content)) {
         // Handle image upload if provided
         if (isset($_FILES['post_image']) && $_FILES['post_image']['size'] > 0) {
-            $uploads_dir = __DIR__ . '/../../uploads/posts/';
+            $uploads_dir = __DIR__ . '/../uploads/posts/';
             if (!is_dir($uploads_dir)) mkdir($uploads_dir, 0755, true);
             
             $file_ext = pathinfo($_FILES['post_image']['name'], PATHINFO_EXTENSION);
@@ -389,22 +389,24 @@ $current_user = $current_user->fetch();
             $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'client';
             
             if ($role === 'supplier') {
-                echo '<button onclick="window.location.href=\'../../Supplier/DASHBOARD.php\'">Dashboard</button>';
-                echo '<button onclick="window.location.href=\'../../Supplier/SERVICES.php\'">Services</button>';
-                echo '<button onclick="window.location.href=\'../../Supplier/BOOKINGS.php\'">Bookings</button>';
+                echo '<button onclick="window.location.href=\'../Supplier/DASHBOARD.php\'">Dashboard</button>';
+                echo '<button onclick="window.location.href=\'../Supplier/SERVICES.php\'">Services</button>';
+                echo '<button onclick="window.location.href=\'../Supplier/BOOKINGS.php\'">Bookings</button>';
+                echo '<button class="active" onclick="window.location.href=\'./newsfeed.php\'">Newsfeed</button>';
             } elseif ($role === 'coordinator') {
-                echo '<button onclick="window.location.href=\'../../coordinator/DASHBOARD.php\'">Dashboard</button>';
-                echo '<button onclick="window.location.href=\'../../coordinator/ASSIGNED_EVENTS.php\'">Events</button>';
-                echo '<button onclick="window.location.href=\'../../coordinator/MYSUPPLIERS.php\'">Suppliers</button>';
+                echo '<button onclick="window.location.href=\'../coordinator/DASHBOARD.php\'">Dashboard</button>';
+                echo '<button onclick="window.location.href=\'../coordinator/ASSIGNED_EVENTS.php\'">Events</button>';
+                echo '<button onclick="window.location.href=\'../coordinator/MYSUPPLIERS.php\'">Suppliers</button>';
+                echo '<button class="active" onclick="window.location.href=\'./newsfeed.php\'">Newsfeed</button>';
             } else {
                 // Default client navigation
-                echo '<button onclick="window.location.href=\'homepage.php\'">Home</button>';
-                echo '<button onclick="window.location.href=\'createevent.php\'">Create Event</button>';
-                echo '<button onclick="window.location.href=\'recommendation.php\'">Recommendations</button>';
+                echo '<button onclick="window.location.href=\'../userui/html/homepage.php\'">Home</button>';
+                echo '<button onclick="window.location.href=\'../userui/html/createevent.php\'">Create Event</button>';
+                echo '<button onclick="window.location.href=\'../userui/html/recommendation.php\'">Recommendations</button>';
+                echo '<button class="active" onclick="window.location.href=\'./newsfeed.php\'">Newsfeed</button>';
             }
             ?>
-            <button class="active" onclick="window.location.href='newsfeed.php'">Newsfeed</button>
-            <button onclick="window.location.href='../../auth/logout.php'" style="color: #ff6b6b;">Logout</button>
+            <button onclick="window.location.href='../auth/logout.php'" style="color: #ff6b6b;">Logout</button>
         </div>
     </div>
 
@@ -474,7 +476,7 @@ $current_user = $current_user->fetch();
                     <div class="post-content">
                         <div class="post-text"><?= esc($post['content']) ?></div>
                         <?php if ($post['image_path']): ?>
-                            <img src="../../uploads/<?= esc($post['image_path']) ?>" alt="Post image" class="post-image">
+                            <img src="../uploads/<?= esc($post['image_path']) ?>" alt="Post image" class="post-image">
                         <?php endif; ?>
                     </div>
 
@@ -546,7 +548,7 @@ $current_user = $current_user->fetch();
             const formData = new FormData();
             formData.append('post_id', postId);
             
-            fetch('../../api/like_post.php', {
+            fetch('../api/like_post.php', {
                 method: 'POST',
                 body: formData
             })
@@ -578,7 +580,7 @@ $current_user = $current_user->fetch();
             formData.append('post_id', postId);
             formData.append('comment', text);
 
-            fetch('../../api/comment_post.php', {
+            fetch('../api/comment_post.php', {
                 method: 'POST',
                 body: formData
             })

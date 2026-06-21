@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_
 // Fetch events assigned to this coordinator with client name
 try {
     $stmt = $pdo->prepare("
-        SELECT e.event_id, u.full_name, e.event_date, e.budget, e.coordinator_status, e.status, e.created_at
+        SELECT e.event_id, u.full_name, e.event_date, e.budget, e.coordinator_status, e.status, e.payment_method, e.created_at
         FROM events e
         LEFT JOIN users u ON e.user_id = u.user_id
         WHERE e.coordinator = ?
@@ -132,6 +132,7 @@ try {
                     <li><button onclick="location.href='DASHBOARD.php'">DASHBOARD</button></li>
                     <li class="active"><button onclick="location.href='ASSIGNED_EVENTS.php'">ASSIGNED EVENTS</button></li>
                     <li><button onclick="location.href='PACKAGES.php'">PACKAGES</button></li>
+                    <li><button onclick="location.href='../globalaccess/newsfeed.php'">NEWSFEED</button></li>
                     <li><button onclick="location.href='MESSAGES.php'">MESSAGES</button></li>
                     <li><button onclick="location.href='MYSUPPLIERS.php'">MY SUPPLIERS</button></li>
                     <li><button onclick="location.href='REPORTS.php'">REPORTS</button></li>
@@ -171,6 +172,7 @@ try {
                                 <th>CLIENT</th>
                                 <th>DATE</th>
                                 <th>BUDGET</th>
+                                <th>PAYMENT METHOD</th>
                                 <th>STATUS</th>
                                 <th>ACTIONS</th>
                             </tr>
@@ -181,6 +183,12 @@ try {
                                     <td><?= htmlspecialchars($event['full_name'] ?? 'Unknown Client') ?></td>
                                     <td><?= $event['event_date'] ? date('M d, Y', strtotime($event['event_date'])) : 'N/A' ?></td>
                                     <td>₱<?= number_format($event['budget'] ?? 0, 0) ?></td>
+                                    <td>
+                                        <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;<?= ($event['payment_method'] ?? 'cash')==='online' ? 'background:rgba(100,150,255,.15);color:#6496ff;' : 'background:rgba(76,175,80,.15);color:#4caf50;' ?>">
+                                            <i class="fas <?= ($event['payment_method'] ?? 'cash')==='online' ? 'fa-credit-card' : 'fa-money-bill-wave' ?>"></i>
+                                            <?= htmlspecialchars(ucfirst($event['payment_method'] ?? 'cash')) ?>
+                                        </span>
+                                    </td>
                                     <td>
                                         <?php
                                         $status = $event['coordinator_status'] ?? 'pending';

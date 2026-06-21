@@ -12,7 +12,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <nav class="nav-menu">
         <ul>
             <li class="<?= $currentPage==='DASHBOARD.php'?'active':'' ?>"><button onclick="location.href='DASHBOARD.php'">DASHBOARD</button></li>
-            <li class="<?= $currentPage==='FEED.php'?'active':'' ?>"><button onclick="location.href='FEED.php'">FEED</button></li>
+            <li><button onclick="location.href='../globalaccess/newsfeed.php'">NEWSFEED</button></li>
             <li class="<?= $currentPage==='BOOKINGS.php'?'active':'' ?>"><button onclick="location.href='BOOKINGS.php'">BOOKINGS</button></li>
             <li class="<?= $currentPage==='SERVICES.php'?'active':'' ?>"><button onclick="location.href='SERVICES.php'">SERVICES</button></li>
             <li class="<?= $currentPage==='MESSAGES.php'?'active':'' ?>"><button onclick="location.href='MESSAGES.php'">MESSAGES</button></li>

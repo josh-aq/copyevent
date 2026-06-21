@@ -6,7 +6,7 @@
     <button onclick="window.location.href='my-clients.php'">My Clients</button>
     <button onclick="window.location.href='my-events.php'">My Events</button>
     <button onclick="window.location.href='messages.php'">Messages</button>
-    <button onclick="window.location.href='../../userui/html/newsfeed.php'">Newsfeed</button>
+    <button onclick="window.location.href='../globalaccess/newsfeed.php'">Newsfeed</button>
     <div class="profile-btn" onclick="window.location.href='profile.php'" title="Profile">
       <i class="fa-regular fa-user"></i>
     </div>

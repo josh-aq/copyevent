@@ -29,6 +29,7 @@ session_start();
                     <li><button onclick="location.href='DASHBOARD.php'">DASHBOARD</button></li>
                     <li><button onclick="location.href='ASSIGNED_EVENTS.php'">ASSIGNED EVENTS</button></li>
                     <li><button onclick="location.href='PACKAGES.php'">PACKAGES</button></li>
+                    <li><button onclick="location.href='../globalaccess/newsfeed.php'">NEWSFEED</button></li>
                     <li><button onclick="location.href='MESSAGES.php'">MESSAGES</button></li>
                     <li  class="active"><button onclick="location.href='MYSUPPLIERS.php'">MY SUPPLIERS</button></li>
                     <li><button onclick="location.href='REPORTS.php'">REPORTS</button></li>

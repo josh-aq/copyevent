@@ -63,6 +63,7 @@ foreach ($services as $service) {
                 e.budget,
                 e.$column,
                 e.$statusColumn,
+                e.payment_method,
                 u.full_name as client_name
             FROM events e
             JOIN users u ON e.user_id = u.user_id
@@ -86,6 +87,7 @@ foreach ($services as $service) {
                 'service' => $category,
                 'service_key' => $serviceKey,
                 'status' => $event[$statusColumn],
+                'payment_method' => $event['payment_method'] ?? 'cash',
                 'business_name' => $serviceName
             ];
         }
@@ -120,6 +122,7 @@ foreach ($services as $service) {
                                 <th>Client Name</th>
                                 <th>Date</th>
                                 <th>Budget</th>
+                                <th>Payment Method</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -127,7 +130,7 @@ foreach ($services as $service) {
                         <tbody>
                             <?php if (empty($bookingRows)): ?>
                             <tr>
-                                <td colspan="8" style="text-align:center;padding:40px;color:var(--muted);">No bookings yet</td>
+                                <td colspan="9" style="text-align:center;padding:40px;color:var(--muted);">No bookings yet</td>
                             </tr>
                             <?php else: ?>
                             <?php foreach ($bookingRows as $r): ?>
@@ -139,6 +142,12 @@ foreach ($services as $service) {
                                 <td><span class="date"><?= esc($r['event_date'] ?? 'TBD') ?></span></td>
                                 <td>₱<?= number_format($r['budget'] ?? 0) ?></td>
                                 <td>
+                                    <span style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;<?= $r['payment_method']==='online' ? 'background:rgba(100,150,255,.15);color:#6496ff;' : 'background:rgba(76,175,80,.15);color:#4caf50;' ?>">
+                                        <i class="fas <?= $r['payment_method']==='online' ? 'fa-credit-card' : 'fa-money-bill-wave' ?>"></i>
+                                        <?= esc(ucfirst($r['payment_method'])) ?>
+                                    </span>
+                                </td>
+                                <td>
                                     <span style="
                                         display:inline-block;
                                         padding:6px 14px;
@@ -148,6 +157,8 @@ foreach ($services as $service) {
                                         <?= $r['status']==='accepted' ? 'background:rgba(100,255,150,.15);color:#64ff96;' : ($r['status']==='declined' ? 'background:rgba(255,100,100,.15);color:#ff6464;' : 'background:rgba(243,197,71,.15);color:var(--gold);') ?>
                                     ">
                                         <?= esc(ucfirst($r['status'])) ?>
+                                    </span>
+                                </td>
                                     </span>
                                 </td>
                                 <td>

@@ -543,7 +543,7 @@
       <span class="step-pill" data-step="3">3. Services</span>
     </div>
 
-    <form action="save_event.php" method="POST">
+    <form action="payment_method.php" method="POST">
     <input type="hidden" name="venue" id="selectedVenue">
     <input type="hidden" name="clothes" id="selectedClothes">
     <input type="hidden" name="catering" id="selectedCatering">
@@ -668,11 +668,91 @@
 }
 
 function openService(service) {
-  const url = service + '.php?from=createevent';
-  const popup = window.open(url, 'SelectService', 'width=1000,height=700,scrollbars=yes,resizable=yes');
-  if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-    window.location.href = url + '&return=' + encodeURIComponent(window.location.href);
+  // Create modal if it doesn't exist
+  let modal = document.getElementById('serviceModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'serviceModal';
+    modal.style.cssText = `
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      padding: 20px;
+    `;
+    document.body.appendChild(modal);
   }
+
+  // Create iframe container
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative;
+    width: 95%;
+    height: 90vh;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  `;
+
+  // Create close button
+  const closeBtn = document.createElement('button');
+  closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+  closeBtn.style.cssText = `
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f3c547;
+    border: none;
+    color: #222;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+  `;
+  closeBtn.onmouseover = () => closeBtn.style.background = '#e8b70f';
+  closeBtn.onmouseout = () => closeBtn.style.background = '#f3c547';
+  closeBtn.onclick = () => {
+    modal.style.display = 'none';
+    container.remove();
+  };
+
+  // Create iframe
+  const iframe = document.createElement('iframe');
+  iframe.src = service + '.php?from=createevent&modal=true';
+  iframe.style.cssText = `
+    flex: 1;
+    border: none;
+    border-radius: 20px;
+  `;
+
+  container.appendChild(closeBtn);
+  container.appendChild(iframe);
+  modal.innerHTML = '';
+  modal.appendChild(container);
+  modal.style.display = 'flex';
+
+  // Close when clicking outside
+  modal.onclick = function(e) {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+      container.remove();
+    }
+  };
 }
 
 // Listen for messages from child windows (popups) that selected a service

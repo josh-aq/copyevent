@@ -6,7 +6,7 @@
     <button onclick="window.location.href='SERVICES.php'">Manage Services</button>
     <button onclick="window.location.href='BOOKINGS.php'">Bookings</button>
     <button onclick="window.location.href='REVIEWS.php'">Reviews</button>
-    <button onclick="window.location.href='FEED.php'">Newsfeed</button>
+    <button onclick="window.location.href='../globalaccess/newsfeed.php'">Newsfeed</button>
     <div class="profile-btn" onclick="window.location.href='PROFILE.php'" title="Profile">
       <i class="fa-regular fa-user"></i>
     </div>

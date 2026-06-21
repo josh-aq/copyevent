@@ -1,16 +1,16 @@
 /* EventIntel Coordinator UI Stylesheet */
 :root {
-  --bg: #050505;
-  --panel: rgba(15, 15, 15, 0.92);
-  --panel2: rgba(255, 255, 255, 0.035);
-  --gold: #f3c547;
-  --gold2: #fff1a8;
+  --bg: #ffffff;
+  --panel: rgba(255, 255, 255, 0.98);
+  --panel2: rgba(243, 197, 71, 0.08);
+  --gold: #d4af37;
+  --gold2: #f3c547;
   --gold3: #c99208;
-  --text: #fff;
-  --muted: #a8a8a8;
-  --border: rgba(255, 215, 0, 0.14);
-  --border2: rgba(255, 215, 0, 0.32);
-  --shadow: 0 22px 50px rgba(0, 0, 0, 0.38);
+  --text: #1a1a1a;
+  --muted: #666666;
+  --border: rgba(212, 175, 55, 0.25);
+  --border2: rgba(212, 175, 55, 0.45);
+  --shadow: 0 22px 50px rgba(0, 0, 0, 0.1);
   --side: 280px;
   --success: #4ade80;
   --warning: #fbbf24;
@@ -46,7 +46,7 @@ body:after {
 body:before {
   width: 430px;
   height: 430px;
-  background: rgba(243, 197, 71, 0.08);
+  background: rgba(212, 175, 55, 0.06);
   top: -140px;
   left: -120px;
 }
@@ -54,7 +54,7 @@ body:before {
 body:after {
   width: 560px;
   height: 560px;
-  background: rgba(243, 197, 71, 0.05);
+  background: rgba(212, 175, 55, 0.04);
   bottom: -220px;
   right: -180px;
 }
@@ -74,10 +74,10 @@ body:after {
   min-width: var(--side);
   min-height: 100vh;
   padding: 24px 18px;
-  background: rgba(12, 12, 12, 0.94);
+  background: rgba(255, 255, 255, 0.95);
   border-right: 1px solid var(--border);
   backdrop-filter: blur(16px);
-  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.28);
+  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 0;
   align-self: flex-start;
@@ -101,7 +101,7 @@ body:after {
 
 .blue-text,
 .pink-text {
-  color: var(--gold);
+  color: #d4af37;
 }
 
 .user-info {
@@ -118,16 +118,16 @@ body:after {
   width: fit-content;
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(243, 197, 71, 0.12);
-  border: 1px solid rgba(243, 197, 71, 0.2);
-  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: #d4af37;
   font-size: 13px;
   font-weight: 700;
 }
 
 .supplier i {
   font-size: 9px;
-  color: var(--gold);
+  color: #d4af37;
 }
 
 /* ===== Navigation ===== */
@@ -156,10 +156,10 @@ body:after {
 
 .nav-menu button:hover,
 .nav-menu li.active button {
-  background: rgba(255, 215, 0, 0.12);
-  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
   border-color: var(--border2);
-  box-shadow: 0 0 14px rgba(255, 215, 0, 0.12);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.15);
   transform: translateX(5px);
 }
 
@@ -260,7 +260,7 @@ p {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(243, 197, 71, 0.1), rgba(243, 197, 71, 0.02));
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
   opacity: 0;
   transition: 0.3s;
   pointer-events: none;
@@ -269,7 +269,7 @@ p {
 .stat-card:hover,
 .stat-card.active {
   border-color: var(--border2);
-  box-shadow: 0 18px 40px rgba(243, 197, 71, 0.16);
+  box-shadow: 0 18px 40px rgba(212, 175, 55, 0.12);
   transform: translateY(-4px);
 }
 
@@ -289,7 +289,7 @@ p {
 
 .stat-card p {
   font-size: clamp(32px, 5vw, 48px);
-  color: var(--gold);
+  color: #d4af37;
   font-weight: 900;
   line-height: 1;
   margin: 0;
@@ -350,42 +350,42 @@ p {
 }
 
 .view-btn:hover {
-  background: rgba(243, 197, 71, 0.12);
-  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
   border-color: var(--border2);
 }
 
 .settle-btn {
-  background: rgba(243, 197, 71, 0.12);
-  color: var(--gold);
-  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
+  border-color: #d4af37;
 }
 
 .settle-btn:hover {
-  background: rgba(243, 197, 71, 0.22);
-  box-shadow: 0 8px 20px rgba(243, 197, 71, 0.18);
+  background: rgba(212, 175, 55, 0.2);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
 }
 
 .accept-btn {
-  background: linear-gradient(135deg, var(--gold2), var(--gold), var(--gold3));
-  color: #111;
+  background: linear-gradient(135deg, #f3c547, #d4af37, #c99208);
+  color: #1a1a1a;
   border: none;
 }
 
 .accept-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(243, 197, 71, 0.25);
+  box-shadow: 0 8px 16px rgba(212, 175, 55, 0.28);
 }
 
 .decline-btn {
-  background: rgba(239, 68, 68, 0.12);
-  color: #ff8b8b;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ff6b6b;
   border: 1px solid rgba(255, 80, 80, 0.35);
 }
 
 .decline-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
-  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.15);
   transform: translateY(-2px);
 }
 
@@ -406,8 +406,8 @@ p {
 .ai-box button {
   padding: 12px 26px;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--gold2), var(--gold), var(--gold3));
-  color: #111;
+  background: linear-gradient(135deg, #f3c547, #d4af37, #c99208);
+  color: #1a1a1a;
   border: none;
   font-weight: 800;
   cursor: pointer;
@@ -416,7 +416,7 @@ p {
 
 .ai-box button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(243, 197, 71, 0.22);
+  box-shadow: 0 12px 24px rgba(212, 175, 55, 0.25);
 }
 
 /* ===== Page Header ===== */
@@ -463,23 +463,23 @@ p {
   right: -50%;
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, rgba(243, 197, 71, 0.1), transparent);
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent);
   pointer-events: none;
 }
 
 .package-card:hover {
   transform: translateY(-8px);
   border-color: var(--border2);
-  box-shadow: 0 24px 50px rgba(243, 197, 71, 0.16);
+  box-shadow: 0 24px 50px rgba(212, 175, 55, 0.12);
 }
 
 .package-card.featured {
-  border-color: var(--gold);
-  box-shadow: 0 0 30px rgba(243, 197, 71, 0.2);
+  border-color: #d4af37;
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
 }
 
 .package-card.featured:hover {
-  box-shadow: 0 24px 60px rgba(243, 197, 71, 0.28);
+  box-shadow: 0 24px 60px rgba(212, 175, 55, 0.2);
 }
 
 .package-card h3 {
@@ -493,7 +493,7 @@ p {
 
 .package-card .price {
   font-size: 28px;
-  color: var(--gold);
+  color: #d4af37;
   font-weight: 900;
   margin-bottom: 24px;
   position: relative;
@@ -518,7 +518,7 @@ p {
 
 .package-card li:before {
   content: '✔ ';
-  color: var(--gold);
+  color: #d4af37;
   font-weight: 800;
   margin-right: 8px;
 }
@@ -527,8 +527,8 @@ p {
   width: 100%;
   padding: 14px 20px;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--gold2), var(--gold), var(--gold3));
-  color: #111;
+  background: linear-gradient(135deg, #f3c547, #d4af37, #c99208);
+  color: #1a1a1a;
   border: none;
   font-weight: 800;
   cursor: pointer;
@@ -539,7 +539,7 @@ p {
 
 .package-card button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(243, 197, 71, 0.22);
+  box-shadow: 0 12px 24px rgba(212, 175, 55, 0.25);
 }
 
 /* ===== Tables ===== */
@@ -556,14 +556,14 @@ p {
 }
 
 .data-table th {
-  background: rgba(243, 197, 71, 0.09);
+  background: rgba(212, 175, 55, 0.08);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 16px 18px;
   text-align: left;
   font-size: 13px;
   letter-spacing: 0.8px;
-  color: var(--gold);
+  color: #d4af37;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -583,7 +583,7 @@ p {
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 18px;
-  color: #d8d8d8;
+  color: #666666;
   font-size: 15px;
 }
 
@@ -601,7 +601,7 @@ p {
 }
 
 .data-table tbody tr:hover td {
-  background: rgba(243, 197, 71, 0.05);
+  background: rgba(212, 175, 55, 0.05);
 }
 
 /* ===== Status Badge ===== */
@@ -653,7 +653,7 @@ p {
 .card:hover {
   transform: translateY(-4px);
   border-color: var(--border2);
-  box-shadow: 0 18px 40px rgba(243, 197, 71, 0.16);
+  box-shadow: 0 18px 40px rgba(212, 175, 55, 0.12);
 }
 
 .card-header {
@@ -697,7 +697,7 @@ p {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid var(--border);
-  background: rgba(18, 18, 18, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   color: var(--text);
   border-radius: 12px;
   font-size: 15px;
@@ -709,7 +709,7 @@ p {
 .form-group select:focus,
 .form-group textarea:focus {
   border-color: var(--border2);
-  box-shadow: 0 0 14px rgba(243, 197, 71, 0.12);
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.12);
 }
 
 .form-group textarea {
@@ -719,7 +719,7 @@ p {
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #8f8f8f;
+  color: #999999;
 }
 
 /* ===== Buttons ===== */
@@ -736,13 +736,13 @@ p {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--gold2), var(--gold), var(--gold3));
-  color: #111;
+  background: linear-gradient(135deg, #f3c547, #d4af37, #c99208);
+  color: #1a1a1a;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(243, 197, 71, 0.22);
+  box-shadow: 0 12px 24px rgba(212, 175, 55, 0.25);
 }
 
 .btn-secondary {
@@ -752,31 +752,31 @@ p {
 }
 
 .btn-secondary:hover {
-  background: rgba(243, 197, 71, 0.12);
-  color: var(--gold);
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
   border-color: var(--border2);
 }
 
 .btn-success {
-  background: rgba(74, 222, 128, 0.12);
+  background: rgba(74, 222, 128, 0.1);
   color: var(--success);
   border: 1px solid var(--success);
 }
 
 .btn-success:hover {
-  background: rgba(74, 222, 128, 0.22);
-  box-shadow: 0 8px 20px rgba(74, 222, 128, 0.18);
+  background: rgba(74, 222, 128, 0.2);
+  box-shadow: 0 8px 20px rgba(74, 222, 128, 0.15);
 }
 
 .btn-danger {
-  background: rgba(239, 68, 68, 0.12);
+  background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
   border: 1px solid var(--danger);
 }
 
 .btn-danger:hover {
-  background: rgba(239, 68, 68, 0.22);
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.18);
+  background: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.15);
 }
 
 /* ===== Alerts ===== */
@@ -825,8 +825,8 @@ p {
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid rgba(239, 68, 68, 0.35);
-  background: rgba(239, 68, 68, 0.12);
-  color: #ff8b8b;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ff6b6b;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -840,9 +840,9 @@ p {
 }
 
 .logout-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.2);
   border-color: rgba(239, 68, 68, 0.6);
-  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.2);
+  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.15);
   transform: translateY(-2px);
 }
 .text-center {
@@ -854,7 +854,7 @@ p {
 }
 
 .text-gold {
-  color: var(--gold);
+  color: #d4af37;
 }
 
 .mt-20 {
@@ -889,8 +889,8 @@ p {
   padding: 12px 16px;
   border-radius: 12px;
   border: 1px solid rgba(239, 68, 68, 0.35);
-  background: rgba(239, 68, 68, 0.12);
-  color: #ff8b8b;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ff6b6b;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -904,9 +904,9 @@ p {
 }
 
 .logout-btn:hover {
-  background: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.2);
   border-color: rgba(239, 68, 68, 0.6);
-  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.2);
+  box-shadow: 0 8px 16px rgba(239, 68, 68, 0.15);
   transform: translateY(-2px);
 }
 
@@ -935,7 +935,7 @@ p {
   display: flex;
   align-items: center;
   gap: 15px;
-  background: var(--panel2);
+  background: rgba(243, 197, 71, 0.05);
   border: 1px solid var(--border);
   padding: 18px 20px;
   border-radius: 18px;
@@ -952,14 +952,14 @@ p {
   height: 46px;
   border-radius: 50%;
   flex: 0 0 46px;
-  background: linear-gradient(135deg, var(--gold2), var(--gold3));
-  box-shadow: 0 0 18px rgba(243, 197, 71, 0.18);
+  background: linear-gradient(135deg, #f3c547, #c99208);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.2);
 }
 
 .messages input {
   width: 100%;
   border: 1px solid var(--border);
-  background: rgba(18, 18, 18, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   color: var(--text);
   border-radius: 14px;
   outline: none;
@@ -968,7 +968,7 @@ p {
 }
 
 .messages input::placeholder {
-  color: #8f8f8f;
+  color: #999999;
 }
 
 /* ===== Services Section (My Suppliers) ===== */
@@ -1001,7 +1001,7 @@ p {
 .service-card:hover {
   transform: translateY(-8px);
   border-color: var(--border2);
-  box-shadow: 0 24px 50px rgba(243, 197, 71, 0.12);
+  box-shadow: 0 24px 50px rgba(212, 175, 55, 0.1);
 }
 
 .service-card img {
@@ -1010,8 +1010,8 @@ p {
   object-fit: cover;
   border-radius: 22px;
   margin-bottom: 18px;
-  filter: brightness(0.78);
-  background: #111;
+  filter: brightness(0.95);
+  background: #f5f5f5;
 }
 
 .service-card h4 {
@@ -1030,7 +1030,7 @@ p {
 }
 
 .service-card .star-rating {
-  color: var(--gold);
+  color: #d4af37;
   font-weight: 800;
   margin-bottom: 14px;
 }
@@ -1039,8 +1039,8 @@ p {
   width: 100%;
   padding: 12px 20px;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--gold2), var(--gold), var(--gold3));
-  color: #111;
+  background: linear-gradient(135deg, #f3c547, #d4af37, #c99208);
+  color: #1a1a1a;
   border: none;
   font-weight: 800;
   cursor: pointer;
@@ -1049,7 +1049,7 @@ p {
 
 .service-card button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(243, 197, 71, 0.22);
+  box-shadow: 0 12px 24px rgba(212, 175, 55, 0.25);
 }
 
 /* ===== Reviews / Reports Page ===== */
@@ -1077,7 +1077,7 @@ p {
 .review-card:hover {
   transform: translateY(-4px);
   border-color: var(--border2);
-  box-shadow: 0 18px 40px rgba(243, 197, 71, 0.12);
+  box-shadow: 0 18px 40px rgba(212, 175, 55, 0.1);
 }
 
 .review-card h3 {
@@ -1149,7 +1149,7 @@ p {
 .setting-card:hover {
   transform: translateY(-4px);
   border-color: var(--border2);
-  box-shadow: 0 18px 40px rgba(243, 197, 71, 0.12);
+  box-shadow: 0 18px 40px rgba(212, 175, 55, 0.1);
 }
 
 .setting-card h3 {
@@ -1161,7 +1161,7 @@ p {
 .setting-card input {
   width: 100%;
   border: 1px solid var(--border);
-  background: rgba(18, 18, 18, 0.88);
+  background: rgba(255, 255, 255, 0.9);
   color: var(--text);
   border-radius: 12px;
   outline: none;
@@ -1173,11 +1173,11 @@ p {
 
 .setting-card input:focus {
   border-color: var(--border2);
-  box-shadow: 0 0 12px rgba(243, 197, 71, 0.12);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.12);
 }
 
 .setting-card input::placeholder {
-  color: #8f8f8f;
+  color: #999999;
 }
 
 .setting-card label {

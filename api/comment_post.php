@@ -27,7 +27,7 @@ $fetch->execute([$cid]);
 $row = $fetch->fetch();
 
 if ($row) {
-    $html = '<div class="comment"><strong>' . esc($row['full_name']) . '</strong> <span class="time">' . date('M j, Y g:i A', strtotime($row['created_at'])) . '</span><div>' . esc($row['comment']) . '</div></div>';
+    $html = '<div class="comment" style="padding:8px 0;border-top:1px solid rgba(0,0,0,0.03);"><strong>' . esc($row['full_name']) . '</strong> <span class="time" style="color:#999; font-size:12px; margin-left:8px;">' . date('M j, Y g:i A', strtotime($row['created_at'])) . '</span><div style="margin-top:6px;color:#333;">' . esc($row['comment']) . '</div></div>';
     echo json_encode(['success' => true, 'comment_html' => $html]);
     exit;
 }
