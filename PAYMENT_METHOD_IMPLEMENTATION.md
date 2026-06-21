@@ -3,7 +3,7 @@
 ## Overview
 The payment flow has been completely restructured to require payment method selection BEFORE event creation is finalized. Users must now choose between CASH or ONLINE payment, and suppliers/coordinators can see this choice and manage their bookings accordingly.
 
-## Changes Made
+## Changes Made hhwweheheeh
 
 ### 1. Database Changes
 - **File**: `database/migrations/002_add_payment_method_to_events.sql`
@@ -11,7 +11,7 @@ The payment flow has been completely restructured to require payment method sele
   - `payment_method` VARCHAR(50) - Stores 'cash' or 'online'
   - `payment_status` VARCHAR(50) - Tracks payment status (pending/completed)
 
-**Migration SQL**:
+**Migration SQL**
 ```sql
 ALTER TABLE events ADD COLUMN payment_method VARCHAR(50) DEFAULT NULL;
 ALTER TABLE events ADD COLUMN payment_status VARCHAR(50) DEFAULT 'pending';
